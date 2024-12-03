@@ -60,6 +60,8 @@ Train&Test dedicated policy for single $nline=0 object in $Object_File=train_set
 python train.py --task=StateBasedGrasp --algo=ppo --seed=0 --rl_device cuda:0 \
     --num_envs 1000 --max_iterations 10000 --config dedicated_policy.yaml --headless \
     --object_scale_file train_set_results.yaml --start_line 0 --end_line 1
+```
+```
 python train.py --task=StateBasedGrasp --algo=ppo --seed=0 --rl_device cuda:0 \
     --num_envs 1000 --max_iterations 10000 --config dedicated_policy.yaml --headless --render_hyper_view --test --test_iteration 1 \
     --object_scale_file train_set_results.yaml --start_line 0 --end_line 1
@@ -84,7 +86,6 @@ Test state-based universal policy on $nline=0 object.
 python train.py --task StateBasedGrasp --algo dagger_value --seed 0 --rl_device cuda:0 \
 --num_envs 100 --max_iterations 10000 --config universal_policy_state_based.yaml --headless --test --test_iteration 1 \
 --model_dir distill_0000_0009 --object_scale_file train_set_results.yaml --start_line 0 --end_line 1
-'''
 '''
 Test vision-based universal policy on $nline=0 object.
 '''
