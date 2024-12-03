@@ -1,0 +1,106 @@
+Infos:
+  save_name: Results
+
+Modes:
+  # default settings
+  train_default: False
+  random_time: True
+  static_init: True
+
+  # observation space
+  clean_obs: True
+  encode_obs_time: True
+  encode_hand_object_dist: True
+  zero_object_visual_feature: True
+
+  # running modes
+  init_pca_hand: False
+  flag_joint_dist: False
+  flag_body_dist: True
+
+  # hyper params
+  double_update_step: True
+  double_iteration_step: False
+  double_update_half_iteration_step: False
+
+Models:
+  # model design
+  pi_hid_sizes: [1024, 1024, 512, 512]
+  vf_hid_sizes: [1024, 1024, 512, 512]
+  activation: elu # can be elu, relu, selu, crelu, lrelu, tanh, sigmoid
+  backbone_type: None
+  freeze_backbone: False
+  sigmoid_actions: False
+
+Weights:
+  # space
+  num_action: 24
+  num_observation: 400
+
+  # init hand pose
+  delta_init_qpos_value: -0.1
+
+  # hand to object distances
+  right_hand_dist: -1.0
+  right_hand_finger_dist: -1.0
+  right_hand_joint_dist: 0.0
+  right_hand_body_dist: -1.0
+  # contact threshold
+  max_finger_dist: 0.3
+  max_hand_dist: 0.06
+  max_goal_dist: 0.05
+
+  # target hand pca rot
+  delta_target_hand_pca: 0.0
+  # random hand exploration
+  right_hand_exploration_dist: 0.0
+
+  # distance to goal
+  goal_dist: -0.5
+  goal_rew: 1.0
+  # move up
+  hand_up: 2.0
+  # goal bonus
+  bonus: 1.0
+
+  # goal_dist in hand_up
+  hand_up_goal_dist: 1.0
+
+
+Obs:
+  # observation intervals
+  intervals:
+    hand_dofs:
+    - 0
+    - 66
+    hand_fingers:
+    - 66
+    - 161
+    hand_states:
+    - 161
+    - 167
+    actions:
+    - 167
+    - 191
+    objects:
+    - 191
+    - 207
+    object_visual:
+    - 207
+    - 335
+    times:
+    - 335
+    - 364
+    hand_objects:
+    - 364
+    - 400
+  # observation names
+  names:
+  - hand_dofs
+  - hand_fingers
+  - hand_states
+  - actions
+  - objects
+  - object_visual
+  - times
+  - hand_objects

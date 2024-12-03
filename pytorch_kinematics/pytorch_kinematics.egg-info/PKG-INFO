@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: pytorch_kinematics
+Version: 0.3.0
+Summary: Robot kinematics implemented in pytorch
+Home-page: https://github.com/UM-ARM-Lab/pytorch_kinematics
+Author: zhsh
+Author-email: zhsh@umich.edu
+License: MIT
+Requires-Dist: torch
+Requires-Dist: numpy
+Requires-Dist: transformations
+Requires-Dist: absl-py
