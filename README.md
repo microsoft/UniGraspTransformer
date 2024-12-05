@@ -1,5 +1,5 @@
 # UniGraspTransformer
-UniGraspTransformer Code Repository
+UniGraspTransformer Code Repository.
 
 # Folder Structure:
 ```
