@@ -9,61 +9,6 @@ import matplotlib.pyplot as plt
 from utils.general_utils import *
 
 
-# plot train_log for mlp training
-def plot_mlp_train_log_losses(target_result_dir, log_name='mlp.log'):
-    # init train_log_losses
-    loss_dict = {'losses': [], 'niter': [], 'ngroup': [], 'nsplit': []}
-    # locate and process loss.log
-    log_file = osp.join(target_result_dir, log_name)
-    # load log_file lines for niter_ngroup pair
-    with open(log_file, 'r') as file: log_lines = file.readlines()
-
-    # load data from log lines
-    for log_line in log_lines:
-        # locate loss_line
-        loss_line = log_line.split(';')[0].split(',')
-        # append losses
-        loss_dict['losses'].append(float(loss_line[1].split(' ')[2][:6]))
-        # append niter_ngroup_nsplit
-        loss_dict['niter'].append(int(loss_line[2].split(' ')[2]))
-        loss_dict['ngroup'].append(int(loss_line[3].split(' ')[2]))
-        loss_dict['nsplit'].append(int(loss_line[4].split(' ')[2]))
-    
-    # compute losses for each iteration
-    num_lines = len(loss_dict['losses'])
-    num_group = max(loss_dict['ngroup']) + 1
-    num_split = max(loss_dict['nsplit']) + 1
-    len_iters = num_group * num_split
-    num_iters = num_lines // len_iters
-    iter_losses = []
-    for niter in range(num_iters):
-        iter_losses.append(np.mean(loss_dict['losses'][niter*len_iters:(niter+1)*len_iters]))
-    # sort loss_iters for saved models
-    sorted_loss_iters = np.argsort(iter_losses)
-    sorted_loss_iters = [niter for niter in sorted_loss_iters if niter % 2 == 0]  # save rate: 2 or 5
-    sorted_losses = [iter_losses[niter] for niter in sorted_loss_iters]
-
-    # get min_loss_iter
-    min_loss_iter = sorted_loss_iters[0]
-    min_loss_line = min_loss_iter * len_iters
-
-    # plot losses over niter_ngroup_nsplit
-    plt.figure(figsize=(15, 5))
-    plt.semilogy(range(num_lines), loss_dict['losses'])
-    plt.xticks(ticks=[n*len_iters for n in range(num_iters + 1)], labels=[n for n in range(num_iters + 1)])
-    plt.axvline(x=min_loss_line+len_iters, color='red', linestyle='--', linewidth=2, label='Min Loss: {}'.format(['{:.4f}'.format(loss) for loss in sorted_losses[:5]]))
-    plt.axvline(x=min_loss_line, color='red', linestyle='--', linewidth=2, label='Min Loss Iters: {}'.format(['{:04d}'.format(niter) for niter in sorted_loss_iters[:5]]))
-    plt.legend(loc='upper left', fontsize=12, title='Legend Title', title_fontsize='13')
-    plt.xlabel('niter_ngroup_nsplit')
-    plt.ylabel('mse_losses')
-    plt.title('MLP Training {}'.format(target_result_dir.split('/')[-1]))
-    # save the loss figure
-    save_name = log_file.split('/')[-1].split('.')[0]
-    plt.savefig(osp.join(target_result_dir, '{}_losses_{}.png'.format(save_name, num_iters-1)), format='png')
-    # return min_loss and min_iter
-    return sorted_losses[0], sorted_loss_iters[0]
-
-
 # plot train_log for offline training
 def plot_train_log_losses(target_result_dir, log_name='train.log', save_rate=5):
     # init train_log_losses
@@ -223,7 +168,6 @@ if __name__ == '__main__':
         result_logs, result_successes = [], []
         for result_folder in result_folders:
             print('Plot Result:', result_folder)
-            if osp.exists(osp.join(result_folder, 'mlp.log')): plot_mlp_train_log_losses(result_folder, log_name='mlp.log')
             if osp.exists(osp.join(result_folder, 'train.log')): plot_train_log_losses(result_folder, log_name='train.log')
             logs, nums, successes = plot_single_object_train_results(result_folder, args.name, args.start, args.finish)
             result_logs.append(logs)
