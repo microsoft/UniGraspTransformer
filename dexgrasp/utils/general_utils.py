@@ -28,11 +28,13 @@ from pytorch3d.transforms import euler_angles_to_matrix
 
 
 # locate SupDexGrasp folder
-LOG_DIR = "/data0/v-wenbowang/Desktop/Logs"
 BASE_DIR = osp.dirname(osp.dirname(osp.dirname(osp.realpath(__file__))))
+LOG_DIR = osp.join(osp.dirname(BASE_DIR), 'Logs')
+ASSET_DIR = osp.join(osp.dirname(BASE_DIR), 'Assets')
 print('================ Run ================')
-print('LOG_DIR:', LOG_DIR)
 print('BASE_DIR', BASE_DIR)
+print('LOG_DIR:', LOG_DIR)
+print('ASSET_DIR:', ASSET_DIR)
 print('================ Run ================')
 
 
@@ -200,7 +202,7 @@ def grid_camera_images(images, size=[2, 3], border=False):
 # load train_object_groups.yaml
 def load_object_scale_group_yaml(file_path, group, nline=None):
     # init object_line_list, object_scale_list, object_scale_dict
-    object_line_list, object_scale_list, object_scale_dict, result_dict = [], [], {}, {}
+    object_line_list, object_scale_list, object_scale_dict = [], [], {}
     # load object_scale_group
     object_scale_group = load_yaml(file_path)[group]
     # unpack object_scale_group
@@ -217,13 +219,13 @@ def load_object_scale_group_yaml(file_path, group, nline=None):
         obj_name, scale_name = '{}/{}'.format(object_scale_split[0], object_scale_split[1]), object_scale_split[2]
         if obj_name not in object_scale_dict: object_scale_dict[obj_name] = [float(scale_name)]
         else: object_scale_dict[obj_name].append(float(scale_name))
-    return object_line_list, object_scale_list, object_scale_dict, result_dict
+    return object_line_list, object_scale_list, object_scale_dict
 
 # load train_set_results.yaml
 def load_object_scale_result_yaml(file_path, start=None, end=None, shuffle=False):
     # init object_line_list, object_scale_list, object_scale_dict
     success, index, count = 0, -1, 0
-    object_line_list, object_scale_list, object_scale_dict, result_dict = [], [], {}, {}
+    object_line_list, object_scale_list, object_scale_dict = [], [], {}
     # get line_num and line_indices
     with open(file_path, 'r') as file:
         # get the number of lines
@@ -243,17 +245,14 @@ def load_object_scale_result_yaml(file_path, start=None, end=None, shuffle=False
             line_items = line.split("'")
             obj_name = line_items[1]
             scale_name = line_items[2].split(',')[0][2:-1]
-            result = float(line_items[2].split(',')[1][1:-1])
             # append item
             if obj_name not in object_scale_dict: object_scale_dict[obj_name] = [float(scale_name)]
             else: object_scale_dict[obj_name].append(float(scale_name))
-            result_dict[obj_name+'/'+scale_name] = result
             object_scale_list.append(obj_name+'/'+scale_name)
-            success += result
             count += 1
 
-    print('{}, {}, success_mean: {}'.format(file_path.split('/')[-1], count, success / count))
-    return object_line_list, object_scale_list, object_scale_dict, result_dict
+    print('{}, {}'.format(file_path.split('/')[-1], count))
+    return object_line_list, object_scale_list, object_scale_dict
 
 # print cpu and gpu usage
 def print_cpu_gpu_usage(print_cpu=False, print_gpu=False, gpu_id=0):
@@ -363,7 +362,7 @@ def sample_label_points(points, label, number):
         else: samples = points[n][label_flags[n]][torch.randint(0, num_sample, (number, ))]
         # append label_points
         label_points.append(samples)
-    return torch.stack(label_points), appears
+    return torch.stack(label_points), appears.unsqueeze(-1)
 
 # check object appears, update disappear datas
 def check_object_valid_appears(valids, datas):

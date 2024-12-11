@@ -493,17 +493,17 @@ def get_args(benchmark=False, use_rlg_config=False):
             # update group logdir: Logs/save_name/results_distill/group/save_name/model_dir_seed0/nline_seed0
             else:
                 # load object_scale_groups
-                object_scale_groups = load_yaml(os.path.realpath('../results/state_based/{}'.format(args.object_scale_file)))
+                object_scale_groups = load_yaml(os.path.realpath('../results/configs/{}'.format(args.object_scale_file)))
                 if args.start_line >= len(object_scale_groups[args.group]['object_line']): return args, False
                 args.logdir = os.path.join('{}/{:04d}'.format(distill_folder, object_scale_groups[args.group]['object_line'][args.start_line]))
             
             # test seen and unseen set objects: Logs/save_name/results_distill/random/save_name/model_best.pt
             if args.object_scale_file == 'test_set_seen_cat_results.yaml':
                 args.logdir = os.path.realpath('{}/results_distill/random/{}/results_test_seen_seed0/{:04d}'.format(args.config['Save_Base'], args.config['Distills']['save_name'], args.start_line))
-                args.model_dir = '{}/model_best.pt'.format(os.path.dirname(os.path.dirname(args.logdir)))
+                args.model_dir = '{}/{}/model_best.pt'.format(os.path.dirname(os.path.dirname(args.logdir)), distill_folder.split('/')[-1])
             if args.object_scale_file == 'test_set_unseen_cat_results.yaml':
                 args.logdir = os.path.realpath('{}/results_distill/random/{}/results_test_unseen_seed0/{:04d}'.format(args.config['Save_Base'], args.config['Distills']['save_name'], args.start_line))
-                args.model_dir = '{}/model_best.pt'.format(os.path.dirname(os.path.dirname(args.logdir)))
+                args.model_dir = '{}/{}/model_best.pt'.format(os.path.dirname(os.path.dirname(args.logdir)), distill_folder.split('/')[-1])
 
     # train, test default UniDexGrasp++
     if args.default: args.model_dir = '{}/dexgrasp/example_model/state_based_model.pt'.format(BASE_DIR)

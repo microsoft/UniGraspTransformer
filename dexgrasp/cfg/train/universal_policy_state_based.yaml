@@ -92,9 +92,6 @@ Offlines:
 
   # locate trajectory folder
   trajectory_name: results_trajectory_render
-  # use external feature 
-  use_external_feature: True
-  external_feature_name: feature_state_128
 
   # use transformer_encoder actor
   # transformer encoder

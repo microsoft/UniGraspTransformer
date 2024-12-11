@@ -55,23 +55,7 @@ pip install -e .
 Install UniGraspTransformer:
 ```
 cd PROJECT/UniGraspTransformer
-pip install -e .
-```
-
-Install pytorch_kinematics:
-```
-cd PROJECT/UniGraspTransformer/pytorch_kinematics
-pip install -e .
-```
-
-Install pytorch3d:
-```
-pip install "git+https://github.com/facebookresearch/pytorch3d.git"
-```
-
-Prepare folders:
-```
-python PROJECT/UniGraspTransformer/prepare.py
+bash install.sh
 ```
 
 ## Download Assets:
