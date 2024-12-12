@@ -61,6 +61,7 @@ bash install.sh
 ## Download Assets:
 Download meshdatav3_pc_feat.zip and meshdatav3_scaled.tar.xz from [UniDexGrasp++](https://mirrors.pku.edu.cn/dl-release/UniDexGrasp_CVPR2023/dexgrasp_policy/assets/).
 
+Download meshdatav3_init.zip from [here](https://drive.google.com/file/d/14InPt0JFm6UNc-bdWCa4NkOVtATi-_M6/view?usp=sharing).
 Download datasetv4.1_posedata.npy from [here](https://drive.google.com/file/d/1DajtOFyTPC5YhsO-Fd3Gv17x7eAysI1b/view).
 
 
