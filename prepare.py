@@ -6,8 +6,6 @@ os.makedirs(ASSET_DIR, exist_ok=True)
 shutil.copytree(osp.join(BASE_DIR, 'dexgrasp/hand_assets/mjcf'), osp.join(ASSET_DIR, 'mjcf'))
 shutil.copytree(osp.join(BASE_DIR, 'dexgrasp/hand_assets/urdf'), osp.join(ASSET_DIR, 'urdf'))
 shutil.copytree(osp.join(BASE_DIR, 'dexgrasp/hand_assets/textures'), osp.join(ASSET_DIR, 'textures'))
-# copy init assets
-shutil.copyfile(osp.join(BASE_DIR, 'results/meshdatav3_pc_init.zip'), osp.join(ASSET_DIR, 'meshdatav3_pc_init.zip'))
 
 # load configs 
 config_state_based = load_yaml(osp.join(BASE_DIR, 'dexgrasp/cfg/train/universal_policy_state_based.yaml'))
