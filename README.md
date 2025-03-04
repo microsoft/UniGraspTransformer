@@ -27,6 +27,7 @@ PROJECT
     └── Assets
         └── datasetv4.1_posedata.npy
         └── meshdatav3_pc_feat
+        └── meshdatav3_pc_fps
         └── meshdatav3_scaled
         └── meshdatav3_init
         └── textures
@@ -57,9 +58,10 @@ Install UniGraspTransformer:
 cd PROJECT/UniGraspTransformer
 bash install.sh
 ```
+Driver 550.107.02; Cuda 11.6; Ubuntu 20.04
 
 ## Download Assets:
-Download meshdatav3_pc_feat.zip and meshdatav3_scaled.tar.xz from [UniDexGrasp++](https://mirrors.pku.edu.cn/dl-release/UniDexGrasp_CVPR2023/dexgrasp_policy/assets/).
+Download meshdatav3_pc_feat.zip, meshdatav3_pc_fps.zip and meshdatav3_scaled.tar.xz from [UniDexGrasp++](https://mirrors.pku.edu.cn/dl-release/UniDexGrasp_CVPR2023/dexgrasp_policy/assets/).
 
 Download meshdatav3_init.zip from [here](https://drive.google.com/file/d/14InPt0JFm6UNc-bdWCa4NkOVtATi-_M6/view?usp=sharing).
 Download datasetv4.1_posedata.npy from [here](https://drive.google.com/file/d/1DajtOFyTPC5YhsO-Fd3Gv17x7eAysI1b/view).
@@ -134,4 +136,25 @@ bash run_offline_parallel.sh 0 99 100 universal_policy_vision_based.yaml test_se
 ```
 
 # V. Test pre-trained models (IsaacGym4)
-# # Comming soon!
+## Install IsaacGym4
+Please download IsaacGym4 from [Nvidia](https://developer.nvidia.com/isaac-gym/download).
+
+## Download Pre-trained Dedicated Policies:
+Please download 3,015 pre-trained dedicated polcies from [here](https://drive.google.com/file/d/1ikAD848ZqRRrGaQyg_Xy5YVpNaXE40qX/view?usp=sharing).
+(The left 185 training objects cannot be loaded in IsaacGym4).
+
+## Test&Render&Generate Trajectories using Dedicated Policies:
+Test, Render, and Generate Trajectories using pre-trained dedicated policies on train objects 0~99:
+```
+bash run_online_parallel.sh 0 99 100 dedicated_policy.yaml train_set_results.yaml
+```
+
+## Train&Test State-based and Vision-based Universal Policies:
+Train&Test state-based and vision-based universal policies on objects 0~99:
+```
+bash run_offline_parallel.sh 0 99 100 universal_policy_state_based.yaml train_set_results.yaml
+bash run_offline_parallel.sh 0 99 100 universal_policy_vision_based.yaml train_set_results.yaml
+```
+
+## Download Pre-trained Universal Policies:
+# # Comming Soon!
