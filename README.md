@@ -2,6 +2,8 @@
 
 ### <p align="center"> Microsoft Research Asia </p>
 
+### <p align="center"> CVPR 2025 </p>
+
 ### <p align="center">[ArXiv](https://arxiv.org/abs/2412.02699) | [Website](https://dexhand.github.io/UniGraspTransformer/)
 
 <p align="center">
@@ -141,6 +143,7 @@ Please download IsaacGym4 from [Nvidia](https://developer.nvidia.com/isaac-gym/d
 
 ## Download Pre-trained Dedicated Policies:
 Please download 3,015 pre-trained dedicated polcies from [here](https://drive.google.com/file/d/1ikAD848ZqRRrGaQyg_Xy5YVpNaXE40qX/view?usp=sharing).
+
 (The left 185 training objects cannot be loaded in IsaacGym4).
 
 ## Test&Render&Generate Trajectories using Dedicated Policies:
