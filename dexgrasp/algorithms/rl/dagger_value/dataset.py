@@ -81,13 +81,15 @@ class ObjectTrajectoryDatasetBatch(Dataset):
         return self.sample_length
     
     def __getitem__(self, idx):
-        # locate object and trajectory file
-        nobj = idx // (self.num_trajectory // self.group_size)
-        ntraj = idx % (self.num_trajectory // self.group_size)
-        # load object_trajectory data
-        sample = self._load_object_trajectory(nobj, ntraj)
-        return sample
-    
+        # locate object and trajectory file, skip missing data 
+        try:
+            nobj = idx // (self.num_trajectory // self.group_size)
+            ntraj = idx % (self.num_trajectory // self.group_size)
+            return self._load_object_trajectory(nobj, ntraj)
+        except FileNotFoundError:
+            new_idx = (idx + 1) % len(self)  # Try next index
+            return self.__getitem__(new_idx)
+            
     # load object trajectory data
     def _load_object_trajectory(self, nobj, ntraj):
         # load object_trajectory_data: {'observations': (Ngroup, 200, Nobs), 'actions': (Ngroup, 200, Nact), 'features': (Ngroup, 200, 64), 'values': (Ngroup, 200, 1), 'valids': (Ngroup, 200, 1), 'successes: (Ngroup, 1, )'}

@@ -90,8 +90,8 @@ Distills:
 Offlines:
   save_name: universal_policy/state_based
 
-  # locate trajectory folder
-  trajectory_name: results_trajectory_render
+  # locate trajectory folder: state-based
+  trajectory_name: results_trajectory_train
 
   # use transformer_encoder actor
   # transformer encoder

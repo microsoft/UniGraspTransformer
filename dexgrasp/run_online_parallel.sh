@@ -44,17 +44,23 @@ do
         --num_envs $Ntest_envs --max_iterations $Ntrain_its --config $Config_Dir --headless --test --test_iteration $Ntest_its \
         --object_scale_file $Object_File --start_line $nline --end_line $((nline + 1))
 
-        echo "Generate trajectory: $nline, episode: $nepisode, cuda:$cuda_id, config: $Config_Dir"
+        echo "Render dedicated policy: $nline, episode: $nepisode, cuda:$cuda_id, config: $Config_Dir"
+        # test single model for single line in object_scale_file, within Target_List
+        python run_online.py --task StateBasedGrasp --algo ppo --seed 0 --rl_device cuda:${cuda_id} \
+        --num_envs 9 --max_iterations $Ntrain_its --config $Config_Dir --headless --render_hyper_view --test --test_iteration 1 \
+        --object_scale_file $Object_File --start_line $nline --end_line $((nline + 1))
+
+        echo "Generate trajectory for State-Based (results_trajectory_train) (Without Render: Fast): $nline, episode: $nepisode, cuda:$cuda_id, config: $Config_Dir"
         # test single model for single line in object_scale_file, within Target_List
         python run_online.py --task StateBasedGrasp --algo ppo --seed 0 --rl_device cuda:${cuda_id} \
         --num_envs 100 --max_iterations $Ntrain_its --config $Config_Dir --headless --test --test_iteration 10 \
-        --object_scale_file $Object_File --start_line $nline --end_line $((nline + 1)) --save --save_train --save_render
+        --object_scale_file $Object_File --start_line $nline --end_line $((nline + 1)) --save --save_train # --save_render
 
-        # echo "Render dedicated policy: $nline, episode: $nepisode, cuda:$cuda_id, config: $Config_Dir"
+        # echo "Generate trajectory for Vision-Based (results_trajectory_render) (With Render: Slow): $nline, episode: $nepisode, cuda:$cuda_id, config: $Config_Dir"
         # # test single model for single line in object_scale_file, within Target_List
         # python run_online.py --task StateBasedGrasp --algo ppo --seed 0 --rl_device cuda:${cuda_id} \
-        # --num_envs 10 --max_iterations $Ntrain_its --config $Config_Dir --headless --render_hyper_view --test --test_iteration 1 \
-        # --object_scale_file $Object_File --start_line $nline --end_line $((nline + 1))
+        # --num_envs 100 --max_iterations $Ntrain_its --config $Config_Dir --headless --test --test_iteration 10 \
+        # --object_scale_file $Object_File --start_line $nline --end_line $((nline + 1)) --save --save_train --save_render
 
         ) &
         

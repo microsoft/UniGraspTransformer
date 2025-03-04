@@ -125,16 +125,10 @@ def plot_single_object_train_results(target_result_dir, name, start=None, finish
 
 
 # # plot all train results within results_train
-# python plot.py --subfolder results_train --config train_best_0.yaml
+# python plot.py --subfolder results_train --config dedicated_policy.yaml
 
-# # plot all trajectory results within results_trajectory
-# python plot.py --subfolder results_trajectory_test --name trajectory --config train_best_0.yaml
-
-# # plot all train results within results_train trajectory_small
-# python plot.py --subfolder results_trajectory --config train_best_0.yaml --name trajectory_small
-
-# # plot all distill results within container
-# python plot.py --subfolder results_distill/random --config transformer_encoder_concat_0.yaml
+# # plot all distill results within results_distill
+# python plot.py --subfolder results_distill/random --config universal_policy_state_based.yaml
 
 
 if __name__ == '__main__':

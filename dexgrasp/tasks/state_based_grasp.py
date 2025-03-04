@@ -280,6 +280,8 @@ class StateBasedGrasp(BaseTask):
         self.up_axis_idx = self.set_sim_params_up_axis(self.sim_params, self.up_axis)
         # create sim following BaseTask
         self.sim = super().create_sim(self.device_id, self.graphics_device_id, self.physics_engine, self.sim_params)
+        # if self.num_cameras > 0: self.sim = super().create_sim(self.device_id, self.graphics_device_id, self.physics_engine, self.sim_params) # run in local
+        # else: self.sim = super().create_sim(self.device_id, -1, self.physics_engine, self.sim_params) # run in server
         # create ground plane
         self._create_ground_plane()
         # create envs
@@ -1827,9 +1829,13 @@ def compute_hand_reward(
 
     # Assign target initial hand pose in the midair
     target_init_pose = torch.tensor([0.1, 0., 0.6, 0., 0., 0., 0.6, 0., -0.1, 0., 0.6, 0., 0., -0.2, 0., 0.6, 0., 0., 1.2, 0., -0.2, 0.], dtype=dof_pos.dtype, device=dof_pos.device)
-    delta_init_qpos_value = torch.norm(dof_pos - target_init_pose, p=1, dim=-1)
+    delta_init_qpos_value = torch.norm(dof_pos - target_init_pose, p=2, dim=-1)
 
-
+    # right_hand_pose: regularize finger tip pose
+    if 'right_hand_pose' not in weights: weights['right_hand_pose'] = 0.
+    target_hand_pose = torch.tensor([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.], dtype=dof_pos.dtype, device=dof_pos.device)
+    target_hand_mask = torch.tensor([0., 0., 0., 1., 0., 0., 0., 1., 0., 0., 0., 1., 0., 0., 0., 0., 1., 0., 0., 0., 0., 1.], dtype=dof_pos.dtype, device=dof_pos.device)
+    delta_qpos = torch.norm((torch.abs(dof_pos) - target_hand_pose) * target_hand_mask * (torch.abs(dof_pos) > 1.), p=2, dim=-1)
     # # ---------------------- Goal Distances ---------------------- # #
     # Distance from the object/hand pos to the goal pos
     goal_dist = torch.norm(target_pos - object_pos, p=2, dim=-1)
@@ -1910,7 +1916,7 @@ def compute_hand_reward(
         grasp_reward = weights['right_hand_body_dist'] * right_hand_body_dist + weights['right_hand_joint_dist'] * right_hand_joint_dist
         grasp_reward += weights['right_hand_finger_dist'] * right_hand_finger_dist + 2.0 * weights['right_hand_dist'] * right_hand_dist
         grasp_reward += weights['goal_dist'] * goal_dist + weights['goal_rew'] * goal_rew + weights['hand_up'] * hand_up + weights['bonus'] * bonus
-
+        grasp_reward += weights['right_hand_pose'] * delta_qpos
         # Total Reward: init reward + grasp reward
         reward = torch.where(hold_flag != hold_value, init_reward, grasp_reward)
     
